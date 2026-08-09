@@ -178,23 +178,37 @@ function onScroll() {
 window.addEventListener('scroll', onScroll, { passive: true });
 updateScrollState();
 
-// Reveal-on-scroll
-// Trigger the fade-in before an element actually reaches the viewport
-// (rootMargin extends the observed area below the fold) so the transition
-// finishes before scrolling catches up to it, instead of animating several
-// cards at once while a fast scroll is still in progress.
-const observer = new IntersectionObserver(
+// Reveal-on-scroll: scroll first, text appears after. Elements that have
+// scrolled into view stay hidden while scrolling is still happening, and
+// only fade in once scrolling settles -- so the sequence reads as "arrive,
+// then reveal" instead of animating in mid-scroll. This also means reveals
+// never compete with an active scroll for frame budget.
+const pendingReveal = new Set();
+const revealObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
+        pendingReveal.add(entry.target);
+        revealObserver.unobserve(entry.target);
       }
     });
   },
-  { threshold: 0, rootMargin: '0px 0px 200px 0px' }
+  { threshold: 0.15 }
 );
-document.querySelectorAll('.reveal').forEach((node) => observer.observe(node));
+document
+  .querySelectorAll('.reveal')
+  .forEach((node) => revealObserver.observe(node));
+
+let revealTimer = null;
+function scheduleReveal() {
+  clearTimeout(revealTimer);
+  revealTimer = setTimeout(() => {
+    pendingReveal.forEach((el) => el.classList.add('visible'));
+    pendingReveal.clear();
+  }, 200);
+}
+window.addEventListener('scroll', scheduleReveal, { passive: true });
+scheduleReveal();
 
 // Smooth scroll for all in-page anchor links (nav + hero CTAs), offset for
 // the fixed header (which is taller on mobile once it wraps to two rows) so
