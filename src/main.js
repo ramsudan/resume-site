@@ -32,7 +32,7 @@ function renderExperience() {
   const items = resume.experience
     .map(
       (job) => `
-      <div class="timeline-item">
+      <div class="timeline-item reveal">
         <div class="timeline-marker"></div>
         <div class="timeline-content">
           <div class="timeline-head">
@@ -40,11 +40,9 @@ function renderExperience() {
             <span class="timeline-dates">${job.start} — ${job.end}</span>
           </div>
           <p class="timeline-company">${job.company}</p>
-          <div class="timeline-details">
-            <ul>
-              ${job.bullets.map((b) => `<li>${b}</li>`).join('')}
-            </ul>
-          </div>
+          <ul>
+            ${job.bullets.map((b) => `<li>${b}</li>`).join('')}
+          </ul>
         </div>
       </div>`
     )
@@ -194,22 +192,6 @@ const observer = new IntersectionObserver(
   { threshold: 0.15 }
 );
 document.querySelectorAll('.reveal').forEach((node) => observer.observe(node));
-
-// Experience cards expand as they scroll into view
-const expandObserver = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('expanded');
-        expandObserver.unobserve(entry.target);
-      }
-    });
-  },
-  { threshold: 0.3 }
-);
-document
-  .querySelectorAll('.timeline-item')
-  .forEach((node) => expandObserver.observe(node));
 
 // Smooth scroll for nav links
 document.querySelectorAll('.nav a').forEach((link) => {
