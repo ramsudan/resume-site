@@ -197,11 +197,20 @@ const observer = new IntersectionObserver(
 );
 document.querySelectorAll('.reveal').forEach((node) => observer.observe(node));
 
-// Smooth scroll for nav links
+// Smooth scroll for nav links, offset for the fixed header (which is taller
+// on mobile once it wraps to two rows) so the section title doesn't end up
+// hidden underneath it.
+const navHeader = document.querySelector('.nav');
 document.querySelectorAll('.nav a').forEach((link) => {
   link.addEventListener('click', (e) => {
     e.preventDefault();
     const target = document.querySelector(link.getAttribute('href'));
-    target?.scrollIntoView({ behavior: 'smooth' });
+    if (!target) return;
+    const targetY =
+      target.getBoundingClientRect().top +
+      window.scrollY -
+      navHeader.offsetHeight -
+      16;
+    window.scrollTo({ top: targetY, behavior: 'smooth' });
   });
 });
