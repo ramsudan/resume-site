@@ -196,11 +196,11 @@ const observer = new IntersectionObserver(
 );
 document.querySelectorAll('.reveal').forEach((node) => observer.observe(node));
 
-// Smooth scroll for nav links, offset for the fixed header (which is taller
-// on mobile once it wraps to two rows) so the section title doesn't end up
-// hidden underneath it.
+// Smooth scroll for all in-page anchor links (nav + hero CTAs), offset for
+// the fixed header (which is taller on mobile once it wraps to two rows) so
+// the section title doesn't end up hidden underneath it.
 const navHeader = document.querySelector('.nav');
-document.querySelectorAll('.nav a').forEach((link) => {
+document.querySelectorAll('a[href^="#"]').forEach((link) => {
   link.addEventListener('click', (e) => {
     e.preventDefault();
     const target = document.querySelector(link.getAttribute('href'));
