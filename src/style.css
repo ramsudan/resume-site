@@ -269,7 +269,7 @@ main {
 
 .timeline-content li {
   position: relative;
-  padding-left: 1.1rem;
+  padding-left: 1.3rem;
   margin-bottom: 0.4rem;
 }
 
@@ -277,9 +277,9 @@ main {
   content: '';
   position: absolute;
   left: 0;
-  top: 0.55em;
-  width: 6px;
-  height: 6px;
+  top: 0.45em;
+  width: 10px;
+  height: 10px;
   background: var(--accent);
 }
 
