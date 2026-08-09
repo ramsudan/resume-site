@@ -1,15 +1,40 @@
 import * as THREE from 'three';
 
-// Section theme colors the particle field lerps between as the user scrolls.
-const THEMES = [
-  new THREE.Color('#5eead4'), // hero — teal
-  new THREE.Color('#818cf8'), // about — indigo
-  new THREE.Color('#f472b6'), // experience — pink
-  new THREE.Color('#fbbf24'), // skills/projects — amber
-  new THREE.Color('#38bdf8'), // education/contact — sky
-];
+// Section theme colors the particle field lerps between as the user scrolls,
+// one palette per site theme (additive blending needs brighter colors on
+// dark, normal blending needs darker/more saturated colors on light).
+const PALETTES = {
+  light: {
+    blending: THREE.NormalBlending,
+    particleOpacity: 0.55,
+    shapeOpacity: 0.1,
+    colors: [
+      '#0d9488', // hero — teal
+      '#4f46e5', // about — indigo
+      '#db2777', // experience — pink
+      '#d97706', // skills/projects — amber
+      '#0284c7', // education/contact — sky
+    ],
+  },
+  dark: {
+    blending: THREE.AdditiveBlending,
+    particleOpacity: 0.85,
+    shapeOpacity: 0.12,
+    colors: [
+      '#5eead4', // hero — teal
+      '#818cf8', // about — indigo
+      '#f472b6', // experience — pink
+      '#fbbf24', // skills/projects — amber
+      '#38bdf8', // education/contact — sky
+    ],
+  },
+};
 
-export function initScene(canvas) {
+function buildThemeColors(palette) {
+  return palette.colors.map((c) => new THREE.Color(c));
+}
+
+export function initScene(canvas, initialTheme = 'light') {
   const renderer = new THREE.WebGLRenderer({
     canvas,
     antialias: true,
@@ -41,10 +66,8 @@ export function initScene(canvas) {
 
   const material = new THREE.PointsMaterial({
     size: 0.045,
-    color: THEMES[0],
+    color: '#000000',
     transparent: true,
-    opacity: 0.85,
-    blending: THREE.AdditiveBlending,
     depthWrite: false,
   });
   const points = new THREE.Points(geometry, material);
@@ -55,10 +78,9 @@ export function initScene(canvas) {
   for (let i = 0; i < 3; i++) {
     const geo = new THREE.IcosahedronGeometry(1.4 + i * 0.6, 1);
     const mat = new THREE.MeshBasicMaterial({
-      color: THEMES[0],
+      color: '#000000',
       wireframe: true,
       transparent: true,
-      opacity: 0.12,
     });
     const mesh = new THREE.Mesh(geo, mat);
     mesh.position.set(
@@ -68,6 +90,26 @@ export function initScene(canvas) {
     );
     scene.add(mesh);
     shapes.push(mesh);
+  }
+
+  let themeName = initialTheme;
+  let themeColors = buildThemeColors(PALETTES[themeName]);
+  function applyThemeStyle() {
+    const palette = PALETTES[themeName];
+    material.blending = palette.blending;
+    material.opacity = palette.particleOpacity;
+    material.needsUpdate = true;
+    shapes.forEach((mesh) => {
+      mesh.material.opacity = palette.shapeOpacity;
+    });
+  }
+  applyThemeStyle();
+
+  function setTheme(name) {
+    if (!PALETTES[name] || name === themeName) return;
+    themeName = name;
+    themeColors = buildThemeColors(PALETTES[themeName]);
+    applyThemeStyle();
   }
 
   const pointer = { x: 0, y: 0, targetX: 0, targetY: 0 };
@@ -82,10 +124,10 @@ export function initScene(canvas) {
   }
 
   function currentThemeColor(p) {
-    const scaled = p * (THEMES.length - 1);
-    const idx = Math.min(Math.floor(scaled), THEMES.length - 2);
+    const scaled = p * (themeColors.length - 1);
+    const idx = Math.min(Math.floor(scaled), themeColors.length - 2);
     const t = scaled - idx;
-    return THEMES[idx].clone().lerp(THEMES[idx + 1], t);
+    return themeColors[idx].clone().lerp(themeColors[idx + 1], t);
   }
 
   function onResize() {
@@ -124,5 +166,5 @@ export function initScene(canvas) {
   }
   animate();
 
-  return { setScrollProgress };
+  return { setScrollProgress, setTheme };
 }

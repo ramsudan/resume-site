@@ -147,9 +147,32 @@ function renderContact() {
   .filter(Boolean)
   .forEach((s) => app.appendChild(s));
 
+// Theme (light default, persisted, respects toggle)
+const THEME_KEY = 'resume-theme';
+const storedTheme = localStorage.getItem(THEME_KEY);
+let theme = storedTheme === 'dark' ? 'dark' : 'light';
+
+const toggleBtn = document.getElementById('theme-toggle');
+function applyTheme(next) {
+  theme = next;
+  document.documentElement.setAttribute('data-theme', theme);
+  toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  toggleBtn.setAttribute(
+    'aria-label',
+    theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
+  );
+  localStorage.setItem(THEME_KEY, theme);
+}
+applyTheme(theme);
+
 // Background scene
 const canvas = document.getElementById('bg');
-const { setScrollProgress } = initScene(canvas);
+const { setScrollProgress, setTheme } = initScene(canvas, theme);
+
+toggleBtn.addEventListener('click', () => {
+  applyTheme(theme === 'dark' ? 'light' : 'dark');
+  setTheme(theme);
+});
 
 function onScroll() {
   const doc = document.documentElement;
