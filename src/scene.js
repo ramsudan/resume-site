@@ -135,17 +135,14 @@ export function initScene(canvas, initialTheme = 'light') {
     { passive: true }
   );
 
-  // While the user is actively scrolling, skip the render call entirely —
-  // that's the exact moment the browser is busiest with scroll compositing,
-  // so cutting the GPU draw call there removes the contention rather than
-  // just doing less work per frame. One final render fires once it settles.
-  const SCROLL_IDLE_MS = 140;
+  // The camera's scroll-driven zoom renders every frame scrollProgress
+  // actually changes (main.js already coalesces raw scroll events to one
+  // update per animation frame), so it tracks the scroll position smoothly
+  // instead of snapping once scrolling stops.
   let scrollProgress = 0;
-  let lastScrollAt = -Infinity;
   function setScrollProgress(p) {
     if (p !== scrollProgress) needsRender = true;
     scrollProgress = p;
-    lastScrollAt = performance.now();
   }
 
   const tmpColor = new THREE.Color();
@@ -165,12 +162,8 @@ export function initScene(canvas, initialTheme = 'light') {
   window.addEventListener('resize', onResize);
 
   const EPSILON = 0.0008;
-  let hasRenderedOnce = false;
   function animate() {
-    const isScrolling =
-      hasRenderedOnce && performance.now() - lastScrollAt < SCROLL_IDLE_MS;
-
-    if (isScrolling || !needsRender) {
+    if (!needsRender) {
       requestAnimationFrame(animate);
       return;
     }
@@ -195,7 +188,6 @@ export function initScene(canvas, initialTheme = 'light') {
     shapes.forEach((mesh) => mesh.material.color.lerp(color, 0.08));
 
     renderer.render(scene, camera);
-    hasRenderedOnce = true;
 
     const pointerSettled =
       Math.abs(pointer.x - pointer.targetX) < EPSILON &&
