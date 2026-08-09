@@ -22,7 +22,6 @@ function renderHero() {
         <a class="btn btn-ghost" href="#contact">Get in Touch</a>
       </div>
     </div>
-    <div class="scroll-hint">Scroll<span></span></div>
   `);
   section.id = 'home';
   return section;

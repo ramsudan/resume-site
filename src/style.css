@@ -187,26 +187,6 @@ main {
   color: var(--text);
 }
 
-.scroll-hint {
-  position: absolute;
-  bottom: 2.5rem;
-  left: 1.5rem;
-  color: var(--text-dim);
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.scroll-hint span {
-  width: 1px;
-  height: 24px;
-  background: linear-gradient(var(--accent), transparent);
-  display: inline-block;
-}
-
 .section-title {
   font-size: 0.85rem;
   text-transform: uppercase;
