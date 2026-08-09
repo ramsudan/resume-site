@@ -13,7 +13,7 @@ const PALETTES = {
       '#4f46e5', // about — indigo
       '#db2777', // experience — pink
       '#d97706', // skills/projects — amber
-      '#0284c7', // education/contact — sky
+      '#0284c7', // exploring/contact — sky
     ],
   },
   dark: {
@@ -25,7 +25,7 @@ const PALETTES = {
       '#818cf8', // about — indigo
       '#f472b6', // experience — pink
       '#fbbf24', // skills/projects — amber
-      '#38bdf8', // education/contact — sky
+      '#38bdf8', // exploring/contact — sky
     ],
   },
 };

@@ -315,19 +315,6 @@ main {
   margin-bottom: 0.4rem;
 }
 
-.edu-item {
-  margin-bottom: 1.5rem;
-}
-
-.edu-item h4 {
-  margin: 0 0 0.2rem;
-}
-
-.edu-item p {
-  margin: 0;
-  color: var(--text-dim);
-}
-
 .contact-links {
   display: flex;
   gap: 1.5rem;

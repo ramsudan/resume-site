@@ -101,31 +101,11 @@ function renderExploring() {
   return section;
 }
 
-function renderEducation() {
-  const items = resume.education
-    .map(
-      (ed) => `
-      <div class="edu-item reveal">
-        <h4>${ed.school}</h4>
-        <p>${ed.degree}${ed.start ? ` · ${ed.start} — ${ed.end}` : ''}</p>
-        ${ed.notes ? `<p class="edu-notes">${ed.notes}</p>` : ''}
-      </div>`
-    )
-    .join('');
-  const section = el('section', 'section', `
-    <h3 class="section-title reveal">Education</h3>
-    ${items}
-  `);
-  section.id = 'education';
-  return section;
-}
-
 function renderContact() {
   const section = el('section', 'section contact', `
     <h3 class="section-title reveal">Get in Touch</h3>
     <p class="reveal about-text">Open to conversations about web, hybrid app, and AI-assisted development.</p>
     <div class="contact-links reveal">
-      <a href="mailto:${resume.email}">${resume.email}</a>
       <a href="${resume.linkedin}" target="_blank" rel="noopener">LinkedIn</a>
       ${resume.github ? `<a href="${resume.github}" target="_blank" rel="noopener">GitHub</a>` : ''}
     </div>
@@ -141,7 +121,6 @@ function renderContact() {
   renderExperience(),
   renderSkills(),
   renderExploring(),
-  renderEducation(),
   renderContact(),
 ]
   .filter(Boolean)

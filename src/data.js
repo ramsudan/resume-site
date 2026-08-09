@@ -4,7 +4,6 @@ export const resume = {
   name: 'Ramsudan Dongol',
   headline: 'Web / Hybrid App Developer',
   location: 'Irving, Texas, United States',
-  email: 'rammarbro658@gmail.com',
   linkedin: 'https://www.linkedin.com/in/ramsudand',
   github: '',
   summary:
@@ -68,16 +67,6 @@ export const resume = {
       bullets: [
         'Developed UI features for FiOS TV, focused on code reusability and performance optimization.',
       ],
-    },
-  ],
-
-  education: [
-    {
-      school: 'Arkansas Tech University',
-      degree: "Master's Degree",
-      start: '',
-      end: '',
-      notes: '',
     },
   ],
 
