@@ -142,7 +142,7 @@ toggleBtn.addEventListener('click', () => {
 
 // Cached once — static for the life of the page — so fast/repeated scroll
 // events don't re-query the DOM on every firing.
-const navLinks = document.querySelectorAll('.nav a');
+const navLinks = document.querySelectorAll('.nav nav a');
 const sections = document.querySelectorAll('main > section');
 
 // Scroll events can fire far more often than the display refreshes
