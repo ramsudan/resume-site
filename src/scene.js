@@ -54,7 +54,7 @@ export function initScene(canvas, initialTheme = 'light') {
   camera.position.z = 8;
 
   // Particle field
-  const PARTICLE_COUNT = window.innerWidth < 768 ? 900 : 2200;
+  const PARTICLE_COUNT = window.innerWidth < 768 ? 450 : 1100;
   const positions = new Float32Array(PARTICLE_COUNT * 3);
   const spread = 18;
   for (let i = 0; i < PARTICLE_COUNT; i++) {

@@ -154,28 +154,42 @@ toggleBtn.addEventListener('click', () => {
   setTheme(theme);
 });
 
-function onScroll() {
+// Cached once — static for the life of the page — so fast/repeated scroll
+// events don't re-query the DOM on every firing.
+const navLinks = document.querySelectorAll('.nav a');
+const sections = document.querySelectorAll('main > section');
+
+// Scroll events can fire far more often than the display refreshes
+// (especially during a fast trackpad/wheel fling). Coalesce all the work
+// into a single update per animation frame instead of running it per event.
+let scrollTicking = false;
+function updateScrollState() {
   const doc = document.documentElement;
   const scrollTop = doc.scrollTop || document.body.scrollTop;
   const scrollHeight = doc.scrollHeight - doc.clientHeight;
   const progress = scrollHeight > 0 ? scrollTop / scrollHeight : 0;
   setScrollProgress(progress);
 
-  document
-    .querySelectorAll('.nav a')
-    .forEach((a) => a.classList.remove('active'));
-  const sections = document.querySelectorAll('main > section');
   let currentId = sections[0]?.id;
   sections.forEach((s) => {
-    if (window.scrollY >= s.offsetTop - window.innerHeight * 0.4) {
+    if (scrollTop >= s.offsetTop - window.innerHeight * 0.4) {
       currentId = s.id;
     }
   });
-  const activeLink = document.querySelector(`.nav a[href="#${currentId}"]`);
-  activeLink?.classList.add('active');
+  navLinks.forEach((a) => {
+    a.classList.toggle('active', a.getAttribute('href') === `#${currentId}`);
+  });
+
+  scrollTicking = false;
+}
+function onScroll() {
+  if (!scrollTicking) {
+    scrollTicking = true;
+    requestAnimationFrame(updateScrollState);
+  }
 }
 window.addEventListener('scroll', onScroll, { passive: true });
-onScroll();
+updateScrollState();
 
 // Reveal-on-scroll
 const observer = new IntersectionObserver(
