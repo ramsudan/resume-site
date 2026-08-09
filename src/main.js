@@ -180,6 +180,10 @@ window.addEventListener('scroll', onScroll, { passive: true });
 updateScrollState();
 
 // Reveal-on-scroll
+// Trigger the fade-in before an element actually reaches the viewport
+// (rootMargin extends the observed area below the fold) so the transition
+// finishes before scrolling catches up to it, instead of animating several
+// cards at once while a fast scroll is still in progress.
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
@@ -189,7 +193,7 @@ const observer = new IntersectionObserver(
       }
     });
   },
-  { threshold: 0.15 }
+  { threshold: 0, rootMargin: '0px 0px 200px 0px' }
 );
 document.querySelectorAll('.reveal').forEach((node) => observer.observe(node));
 
