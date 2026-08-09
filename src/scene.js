@@ -153,7 +153,16 @@ export function initScene(canvas, initialTheme = 'light') {
     return tmpColor.copy(themeColors[idx]).lerp(themeColors[idx + 1], t);
   }
 
+  // Mobile browsers collapse/expand their address bar as you scroll, which
+  // changes window.innerHeight and fires 'resize' — but the viewport hasn't
+  // actually changed size, so reacting to it (re-fitting the camera, resizing
+  // the renderer) made the background visibly zoom during that scroll. Only
+  // an actual width change (real resize or orientation change) should
+  // re-fit the scene.
+  let lastWidth = window.innerWidth;
   function onResize() {
+    if (window.innerWidth === lastWidth) return;
+    lastWidth = window.innerWidth;
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
