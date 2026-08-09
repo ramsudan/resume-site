@@ -3,7 +3,6 @@
 export const resume = {
   name: 'Ramsudan Dongol',
   headline: 'Web / Hybrid App Developer',
-  location: 'Irving, Texas, United States',
   linkedin: 'https://www.linkedin.com/in/ramsudand',
   github: '',
   summary:
@@ -21,7 +20,6 @@ export const resume = {
       title: 'Web / Hybrid App Developer - Software Engineer VI',
       start: 'Dec 2021',
       end: 'Present',
-      location: 'Colorado, United States',
       bullets: [
         'Working within a shared monorepo to unify app development so features ship once and run across web, iOS, and Android.',
         'Built a config-driven development approach for Angular, enabling remarkably versatile pages generated from configuration.',
@@ -32,7 +30,6 @@ export const resume = {
       title: 'Web Developer',
       start: 'Feb 2015',
       end: 'Mar 2021',
-      location: 'Pleasanton, California, United States',
       bullets: [
         'Developed UI features for a provider data entry and management system, an anti-fraud workbench, a provider data aggregator, and corporate dashboards.',
         'Migrated projects from legacy .NET 4.5 to a modern .NET Core and Angular stack.',
@@ -43,7 +40,6 @@ export const resume = {
       title: 'Web User Interface Developer',
       start: 'Jul 2014',
       end: 'Jan 2015',
-      location: 'San Francisco, California, United States',
       bullets: [
         'Led a team of developers building a bank mobile application, implementing responsive CSS and transforming design prototypes into working mobile pages.',
       ],
@@ -53,7 +49,6 @@ export const resume = {
       title: 'Web Developer',
       start: 'Apr 2013',
       end: 'Jul 2014',
-      location: 'Farmington Hills, Michigan, United States',
       bullets: [
         'Built UI features for Mindtap and MTX, the company’s educational platform for delivering course materials, with a focus on modular design and Test Driven Development.',
       ],
@@ -63,7 +58,6 @@ export const resume = {
       title: 'Web User Interface Developer',
       start: 'Sep 2012',
       end: 'Mar 2013',
-      location: 'Irving, Texas, United States',
       bullets: [
         'Developed UI features for FiOS TV, focused on code reusability and performance optimization.',
       ],

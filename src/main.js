@@ -14,7 +14,6 @@ function el(tag, className, html) {
 function renderHero() {
   const section = el('section', 'section hero', `
     <div class="hero-inner reveal">
-      <p class="eyebrow">${resume.location}</p>
       <h1>${resume.name}</h1>
       <h2>${resume.headline}</h2>
       <p class="summary">${resume.summary}</p>
@@ -58,7 +57,7 @@ function renderExperience() {
             <h4>${job.title}</h4>
             <span class="timeline-dates">${job.start} — ${job.end}</span>
           </div>
-          <p class="timeline-company">${job.company} · ${job.location}</p>
+          <p class="timeline-company">${job.company}</p>
           <div class="timeline-details">
             <ul>
               ${job.bullets.map((b) => `<li>${b}</li>`).join('')}
