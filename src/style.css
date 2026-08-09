@@ -262,12 +262,25 @@ main {
 
 .timeline-content ul {
   margin: 0;
-  padding-left: 1.2rem;
+  padding-left: 0;
+  list-style: none;
   color: var(--text-dim);
 }
 
 .timeline-content li {
+  position: relative;
+  padding-left: 1.1rem;
   margin-bottom: 0.4rem;
+}
+
+.timeline-content li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
 }
 
 .contact-links {
