@@ -37,10 +37,11 @@ function buildThemeColors(palette) {
 export function initScene(canvas, initialTheme = 'light') {
   const renderer = new THREE.WebGLRenderer({
     canvas,
-    antialias: true,
+    antialias: false,
     alpha: true,
+    powerPreference: 'high-performance',
   });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
   renderer.setSize(window.innerWidth, window.innerHeight);
 
   const scene = new THREE.Scene();
@@ -53,7 +54,7 @@ export function initScene(canvas, initialTheme = 'light') {
   camera.position.z = 8;
 
   // Particle field
-  const PARTICLE_COUNT = window.innerWidth < 768 ? 1200 : 3200;
+  const PARTICLE_COUNT = window.innerWidth < 768 ? 900 : 2200;
   const positions = new Float32Array(PARTICLE_COUNT * 3);
   const spread = 18;
   for (let i = 0; i < PARTICLE_COUNT; i++) {
@@ -123,11 +124,12 @@ export function initScene(canvas, initialTheme = 'light') {
     scrollProgress = p;
   }
 
+  const tmpColor = new THREE.Color();
   function currentThemeColor(p) {
     const scaled = p * (themeColors.length - 1);
     const idx = Math.min(Math.floor(scaled), themeColors.length - 2);
     const t = scaled - idx;
-    return themeColors[idx].clone().lerp(themeColors[idx + 1], t);
+    return tmpColor.copy(themeColors[idx]).lerp(themeColors[idx + 1], t);
   }
 
   function onResize() {
