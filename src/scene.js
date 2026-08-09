@@ -40,6 +40,10 @@ export function initScene(canvas, initialTheme = 'light') {
     antialias: false,
     alpha: true,
     powerPreference: 'high-performance',
+    // Required so the last rendered frame stays visible while we skip
+    // render() during scroll — without this the browser clears the canvas
+    // after each composite whether or not we drew anything new.
+    preserveDrawingBuffer: true,
   });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -119,9 +123,16 @@ export function initScene(canvas, initialTheme = 'light') {
     pointer.targetY = (e.clientY / window.innerHeight - 0.5) * 2;
   });
 
+  // While the user is actively scrolling, skip the decorative motion and the
+  // render call entirely — that's the exact moment the browser is busiest
+  // with scroll compositing, so cutting the GPU draw call there removes the
+  // contention rather than just doing less work per frame.
+  const SCROLL_IDLE_MS = 140;
   let scrollProgress = 0;
+  let lastScrollAt = -Infinity;
   function setScrollProgress(p) {
     scrollProgress = p;
+    lastScrollAt = performance.now();
   }
 
   const tmpColor = new THREE.Color();
@@ -140,7 +151,13 @@ export function initScene(canvas, initialTheme = 'light') {
   window.addEventListener('resize', onResize);
 
   const clock = new THREE.Clock();
+  let hasRenderedOnce = false;
   function animate() {
+    if (hasRenderedOnce && performance.now() - lastScrollAt < SCROLL_IDLE_MS) {
+      requestAnimationFrame(animate);
+      return;
+    }
+
     const elapsed = clock.getElapsedTime();
 
     pointer.x += (pointer.targetX - pointer.x) * 0.04;
@@ -164,6 +181,7 @@ export function initScene(canvas, initialTheme = 'light') {
     shapes.forEach((mesh) => mesh.material.color.lerp(color, 0.05));
 
     renderer.render(scene, camera);
+    hasRenderedOnce = true;
     requestAnimationFrame(animate);
   }
   animate();

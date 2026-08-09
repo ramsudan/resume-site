@@ -27,10 +27,6 @@
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 body {
   margin: 0;
   background: var(--bg);
@@ -270,16 +266,18 @@ main {
 }
 
 .timeline-details {
-  max-height: 0;
   opacity: 0;
-  overflow: hidden;
-  transition: max-height 0.6s ease, opacity 0.4s ease;
+  transform: translateY(-10px);
+  /* opacity/transform only — animating max-height forces a layout
+     recalculation on every transition frame, which is exactly the kind of
+     work that compounds with scroll-driven jank. */
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .timeline-item.expanded .timeline-details {
-  max-height: 400px;
   opacity: 1;
-  transition: max-height 0.6s ease, opacity 0.5s ease 0.15s;
+  transform: translateY(0);
+  transition: opacity 0.5s ease 0.1s, transform 0.5s ease 0.1s;
 }
 
 .timeline-marker {
