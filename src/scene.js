@@ -40,9 +40,9 @@ export function initScene(canvas, initialTheme = 'light') {
     antialias: false,
     alpha: true,
     powerPreference: 'high-performance',
-    // Required so the last rendered frame stays visible while we skip
-    // render() during scroll — without this the browser clears the canvas
-    // after each composite whether or not we drew anything new.
+    // The scene only renders on demand (see animate() below) — without this
+    // the browser clears the canvas after every composite, so any frame we
+    // skip would flash blank instead of holding the last drawn image.
     preserveDrawingBuffer: true,
   });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
@@ -99,6 +99,7 @@ export function initScene(canvas, initialTheme = 'light') {
 
   let themeName = initialTheme;
   let themeColors = buildThemeColors(PALETTES[themeName]);
+  let needsRender = true;
   function applyThemeStyle() {
     const palette = PALETTES[themeName];
     material.blending = palette.blending;
@@ -115,22 +116,34 @@ export function initScene(canvas, initialTheme = 'light') {
     themeName = name;
     themeColors = buildThemeColors(PALETTES[themeName]);
     applyThemeStyle();
+    needsRender = true;
   }
 
+  // The scene is otherwise fully idle: no clock-driven rotation, nothing
+  // animates on its own. It only moves in response to the cursor (eased
+  // toward the pointer position) or the scroll position (zoom + color), and
+  // the render loop below stops drawing entirely once those have settled —
+  // so a motionless mouse and a still page mean zero rendering cost.
   const pointer = { x: 0, y: 0, targetX: 0, targetY: 0 };
-  window.addEventListener('pointermove', (e) => {
-    pointer.targetX = (e.clientX / window.innerWidth - 0.5) * 2;
-    pointer.targetY = (e.clientY / window.innerHeight - 0.5) * 2;
-  });
+  window.addEventListener(
+    'pointermove',
+    (e) => {
+      pointer.targetX = (e.clientX / window.innerWidth - 0.5) * 2;
+      pointer.targetY = (e.clientY / window.innerHeight - 0.5) * 2;
+      needsRender = true;
+    },
+    { passive: true }
+  );
 
-  // While the user is actively scrolling, skip the decorative motion and the
-  // render call entirely — that's the exact moment the browser is busiest
-  // with scroll compositing, so cutting the GPU draw call there removes the
-  // contention rather than just doing less work per frame.
+  // While the user is actively scrolling, skip the render call entirely —
+  // that's the exact moment the browser is busiest with scroll compositing,
+  // so cutting the GPU draw call there removes the contention rather than
+  // just doing less work per frame. One final render fires once it settles.
   const SCROLL_IDLE_MS = 140;
   let scrollProgress = 0;
   let lastScrollAt = -Infinity;
   function setScrollProgress(p) {
+    if (p !== scrollProgress) needsRender = true;
     scrollProgress = p;
     lastScrollAt = performance.now();
   }
@@ -147,28 +160,29 @@ export function initScene(canvas, initialTheme = 'light') {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    needsRender = true;
   }
   window.addEventListener('resize', onResize);
 
-  const clock = new THREE.Clock();
+  const EPSILON = 0.0008;
   let hasRenderedOnce = false;
   function animate() {
-    if (hasRenderedOnce && performance.now() - lastScrollAt < SCROLL_IDLE_MS) {
+    const isScrolling =
+      hasRenderedOnce && performance.now() - lastScrollAt < SCROLL_IDLE_MS;
+
+    if (isScrolling || !needsRender) {
       requestAnimationFrame(animate);
       return;
     }
 
-    const elapsed = clock.getElapsedTime();
-
     pointer.x += (pointer.targetX - pointer.x) * 0.04;
     pointer.y += (pointer.targetY - pointer.y) * 0.04;
 
-    points.rotation.y = elapsed * 0.03 + pointer.x * 0.15;
-    points.rotation.x = elapsed * 0.015 + pointer.y * 0.1;
-
+    points.rotation.y = pointer.x * 0.15;
+    points.rotation.x = pointer.y * 0.1;
     shapes.forEach((mesh, i) => {
-      mesh.rotation.x = elapsed * 0.05 * (i + 1);
-      mesh.rotation.y = elapsed * 0.03 * (i + 1);
+      mesh.rotation.y = pointer.x * 0.08 * (i + 1);
+      mesh.rotation.x = pointer.y * 0.05 * (i + 1);
     });
 
     camera.position.x += (pointer.x * 0.6 - camera.position.x) * 0.03;
@@ -177,11 +191,21 @@ export function initScene(canvas, initialTheme = 'light') {
     camera.lookAt(0, 0, 0);
 
     const color = currentThemeColor(scrollProgress);
-    material.color.lerp(color, 0.05);
-    shapes.forEach((mesh) => mesh.material.color.lerp(color, 0.05));
+    material.color.lerp(color, 0.08);
+    shapes.forEach((mesh) => mesh.material.color.lerp(color, 0.08));
 
     renderer.render(scene, camera);
     hasRenderedOnce = true;
+
+    const pointerSettled =
+      Math.abs(pointer.x - pointer.targetX) < EPSILON &&
+      Math.abs(pointer.y - pointer.targetY) < EPSILON;
+    const colorSettled =
+      Math.abs(material.color.r - color.r) < EPSILON &&
+      Math.abs(material.color.g - color.g) < EPSILON &&
+      Math.abs(material.color.b - color.b) < EPSILON;
+    needsRender = !(pointerSettled && colorSettled);
+
     requestAnimationFrame(animate);
   }
   animate();
