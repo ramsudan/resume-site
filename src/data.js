@@ -21,7 +21,8 @@ export const resume = {
       start: 'Dec 2021',
       end: 'Present',
       bullets: [
-        'Working within a shared monorepo to unify app development so features ship once and run across web, iOS, and Android.',
+        'Working on harnesses to leverage AI agents for development and various other automations.'
+        'Worked within a shared micro frontend monorepo to unify app development so features ship once and run across web, iOS, and Android.',
         'Built a config-driven development approach for Angular, enabling remarkably versatile pages generated from configuration.',
       ],
     },
@@ -71,6 +72,8 @@ export const resume = {
     'Angular',
     '.NET Core',
     'Observables / RxJS',
+    'Node/Express',
+    'Gitlab CI/CD',
     'Micro Frontends',
     'Monorepo Architecture',
     'Responsive / Mobile UI',
