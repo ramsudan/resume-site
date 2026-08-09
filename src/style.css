@@ -224,8 +224,6 @@ main {
 
 .timeline {
   position: relative;
-  padding-left: 1.5rem;
-  border-left: 1px solid var(--surface-border);
 }
 
 .timeline-item {
@@ -235,17 +233,6 @@ main {
 
 .timeline-item:last-child {
   padding-bottom: 0;
-}
-
-.timeline-marker {
-  position: absolute;
-  left: -1.61rem;
-  top: 0.35rem;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 12px var(--accent);
 }
 
 .timeline-head {

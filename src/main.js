@@ -32,7 +32,6 @@ function renderExperience() {
     .map(
       (job) => `
       <div class="timeline-item reveal">
-        <div class="timeline-marker"></div>
         <div class="timeline-content">
           <div class="timeline-head">
             <h4>${job.title}</h4>
