@@ -9,11 +9,11 @@ const PALETTES = {
     particleOpacity: 0.55,
     shapeOpacity: 0.1,
     colors: [
-      '#0d9488', // hero — teal
-      '#4f46e5', // about — indigo
-      '#db2777', // experience — pink
-      '#d97706', // skills/projects — amber
-      '#0284c7', // exploring/contact — sky
+      '#b5632c', // hero — terracotta
+      '#6b7c3f', // about — olive
+      '#a4462c', // experience — clay
+      '#c98a2b', // skills/projects — ochre
+      '#8c7a5e', // exploring/contact — sand
     ],
   },
   dark: {
@@ -21,11 +21,11 @@ const PALETTES = {
     particleOpacity: 0.85,
     shapeOpacity: 0.12,
     colors: [
-      '#5eead4', // hero — teal
-      '#818cf8', // about — indigo
-      '#f472b6', // experience — pink
-      '#fbbf24', // skills/projects — amber
-      '#38bdf8', // exploring/contact — sky
+      '#e0954f', // hero — warm amber
+      '#9caf6b', // about — sage
+      '#d97a53', // experience — terracotta glow
+      '#e0b354', // skills/projects — mustard gold
+      '#c9b38a', // exploring/contact — warm sand
     ],
   },
 };
