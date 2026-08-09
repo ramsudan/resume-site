@@ -121,9 +121,10 @@ export function initScene(canvas, initialTheme = 'light') {
 
   // The scene is otherwise fully idle: no clock-driven rotation, nothing
   // animates on its own. It only moves in response to the cursor (eased
-  // toward the pointer position) or the scroll position (zoom + color), and
-  // the render loop below stops drawing entirely once those have settled —
-  // so a motionless mouse and a still page mean zero rendering cost.
+  // toward the pointer position) or the scroll position (color only), and
+  // the render loop below stops drawing entirely once the cursor has
+  // settled — so a motionless mouse and a still page mean zero rendering
+  // cost.
   const pointer = { x: 0, y: 0, targetX: 0, targetY: 0 };
   window.addEventListener(
     'pointermove',
@@ -135,10 +136,9 @@ export function initScene(canvas, initialTheme = 'light') {
     { passive: true }
   );
 
-  // The camera's scroll-driven zoom renders every frame scrollProgress
-  // actually changes (main.js already coalesces raw scroll events to one
-  // update per animation frame), so it tracks the scroll position smoothly
-  // instead of snapping once scrolling stops.
+  // The scroll-driven color renders every frame scrollProgress actually
+  // changes (main.js already coalesces raw scroll events to one update per
+  // animation frame), tracking the scroll position directly with no easing.
   let scrollProgress = 0;
   function setScrollProgress(p) {
     if (p !== scrollProgress) needsRender = true;
@@ -180,23 +180,21 @@ export function initScene(canvas, initialTheme = 'light') {
 
     camera.position.x += (pointer.x * 0.6 - camera.position.x) * 0.03;
     camera.position.y += (-pointer.y * 0.4 - camera.position.y) * 0.03;
-    camera.position.z = 8 - scrollProgress * 2;
     camera.lookAt(0, 0, 0);
 
+    // Direct assignment, not eased — the color should track scroll position
+    // exactly and immediately, so it reads as a bold, drastic shift rather
+    // than a lagging fade.
     const color = currentThemeColor(scrollProgress);
-    material.color.lerp(color, 0.08);
-    shapes.forEach((mesh) => mesh.material.color.lerp(color, 0.08));
+    material.color.copy(color);
+    shapes.forEach((mesh) => mesh.material.color.copy(color));
 
     renderer.render(scene, camera);
 
     const pointerSettled =
       Math.abs(pointer.x - pointer.targetX) < EPSILON &&
       Math.abs(pointer.y - pointer.targetY) < EPSILON;
-    const colorSettled =
-      Math.abs(material.color.r - color.r) < EPSILON &&
-      Math.abs(material.color.g - color.g) < EPSILON &&
-      Math.abs(material.color.b - color.b) < EPSILON;
-    needsRender = !(pointerSettled && colorSettled);
+    needsRender = !pointerSettled;
 
     requestAnimationFrame(animate);
   }
