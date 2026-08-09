@@ -28,24 +28,6 @@ function renderHero() {
   return section;
 }
 
-function renderAbout() {
-  const section = el('section', 'section', `
-    <h3 class="section-title reveal">About</h3>
-    <p class="reveal about-text">${resume.summary}</p>
-    ${
-      resume.certifications?.length
-        ? `<div class="reveal cert-row">
-            ${resume.certifications
-              .map((c) => `<span class="pill">${c}</span>`)
-              .join('')}
-          </div>`
-        : ''
-    }
-  `);
-  section.id = 'about';
-  return section;
-}
-
 function renderExperience() {
   const items = resume.experience
     .map(
@@ -83,6 +65,15 @@ function renderSkills() {
   const section = el('section', 'section', `
     <h3 class="section-title reveal">Skills</h3>
     <div class="chip-grid">${chips}</div>
+    ${
+      resume.certifications?.length
+        ? `<div class="reveal cert-row">
+            ${resume.certifications
+              .map((c) => `<span class="pill">${c}</span>`)
+              .join('')}
+          </div>`
+        : ''
+    }
   `);
   section.id = 'skills';
   return section;
@@ -118,7 +109,6 @@ function renderContact() {
 
 [
   renderHero(),
-  renderAbout(),
   renderExperience(),
   renderSkills(),
   renderExploring(),
