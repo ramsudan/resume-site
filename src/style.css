@@ -104,6 +104,7 @@ body {
   font-size: 1rem;
   line-height: 1;
   transition: transform 0.2s ease, border-color 0.2s ease;
+  will-change: transform;
 }
 
 .theme-toggle:hover {
@@ -172,6 +173,7 @@ main {
   font-size: 0.9rem;
   font-weight: 600;
   transition: transform 0.2s ease, opacity 0.2s ease;
+  will-change: transform;
 }
 
 .btn:hover {
@@ -312,6 +314,12 @@ main {
   opacity: 0;
   transform: translateY(16px);
   transition: opacity 0.4s ease, transform 0.4s ease;
+  /* Promote to its own compositor layer before the transition starts
+     (rather than letting the browser do it lazily at animation-start,
+     which can cost a dropped frame) -- cleaned up via JS once each
+     element's transition finishes, so we're not holding dozens of layers
+     promoted indefinitely after everything has revealed. */
+  will-change: opacity, transform;
 }
 
 .reveal.visible {
@@ -335,5 +343,14 @@ main {
   }
   .section {
     padding: 4rem 1.25rem;
+  }
+  .hero {
+    /* The fixed nav can wrap to 3 rows on narrow phones (~109px tall at
+       320px wide), and the hero's vertical centering doesn't know about
+       it -- on a short viewport with a lot of hero copy, that pushed the
+       name's first line underneath the nav. Guaranteed top clearance
+       instead of relying on centering math. */
+    justify-content: flex-start;
+    padding-top: 8rem;
   }
 }

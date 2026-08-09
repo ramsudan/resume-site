@@ -202,7 +202,19 @@ let revealTimer = null;
 function scheduleReveal() {
   clearTimeout(revealTimer);
   revealTimer = setTimeout(() => {
-    pendingReveal.forEach((el) => el.classList.add('visible'));
+    pendingReveal.forEach((el) => {
+      el.classList.add('visible');
+      // Release the compositor layer .reveal's will-change requested once
+      // this element's own fade/slide transition actually finishes, so we
+      // aren't holding dozens of layers promoted for the rest of the visit.
+      el.addEventListener(
+        'transitionend',
+        () => {
+          el.style.willChange = 'auto';
+        },
+        { once: true }
+      );
+    });
     pendingReveal.clear();
   }, 200);
 }
