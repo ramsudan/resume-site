@@ -1,11 +1,27 @@
-import * as THREE from 'three';
+// Named imports (not `import * as THREE`) so Rollup can tree-shake the
+// unused 90%+ of three.js out of the production bundle.
+import {
+  WebGLRenderer,
+  Scene,
+  PerspectiveCamera,
+  BufferGeometry,
+  BufferAttribute,
+  PointsMaterial,
+  Points,
+  IcosahedronGeometry,
+  MeshBasicMaterial,
+  Mesh,
+  Color,
+  NormalBlending,
+  AdditiveBlending,
+} from 'three';
 
 // Section theme colors the particle field lerps between as the user scrolls,
 // one palette per site theme (additive blending needs brighter colors on
 // dark, normal blending needs darker/more saturated colors on light).
 const PALETTES = {
   light: {
-    blending: THREE.NormalBlending,
+    blending: NormalBlending,
     particleOpacity: 0.55,
     shapeOpacity: 0.1,
     colors: [
@@ -17,7 +33,7 @@ const PALETTES = {
     ],
   },
   dark: {
-    blending: THREE.AdditiveBlending,
+    blending: AdditiveBlending,
     particleOpacity: 0.85,
     shapeOpacity: 0.12,
     colors: [
@@ -31,11 +47,11 @@ const PALETTES = {
 };
 
 function buildThemeColors(palette) {
-  return palette.colors.map((c) => new THREE.Color(c));
+  return palette.colors.map((c) => new Color(c));
 }
 
 export function initScene(canvas, initialTheme = 'light') {
-  const renderer = new THREE.WebGLRenderer({
+  const renderer = new WebGLRenderer({
     canvas,
     antialias: false,
     alpha: true,
@@ -44,12 +60,16 @@ export function initScene(canvas, initialTheme = 'light') {
     // the browser clears the canvas after every composite, so any frame we
     // skip would flash blank instead of holding the last drawn image.
     preserveDrawingBuffer: true,
+    // mediump runs roughly 2x faster than the default highp on mobile GPUs,
+    // and our flat-shaded, unlit particles/wireframes have no need for the
+    // extra precision.
+    precision: 'mediump',
   });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
   renderer.setSize(window.innerWidth, window.innerHeight);
 
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(
+  const scene = new Scene();
+  const camera = new PerspectiveCamera(
     60,
     window.innerWidth / window.innerHeight,
     0.1,
@@ -66,28 +86,31 @@ export function initScene(canvas, initialTheme = 'light') {
     positions[i * 3 + 1] = (Math.random() - 0.5) * spread;
     positions[i * 3 + 2] = (Math.random() - 0.5) * spread;
   }
-  const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  const geometry = new BufferGeometry();
+  geometry.setAttribute('position', new BufferAttribute(positions, 3));
 
-  const material = new THREE.PointsMaterial({
+  const material = new PointsMaterial({
     size: 0.045,
     color: '#000000',
     transparent: true,
     depthWrite: false,
   });
-  const points = new THREE.Points(geometry, material);
+  const points = new Points(geometry, material);
   scene.add(points);
 
-  // A few large soft wireframe icosahedrons drifting in the background for depth.
+  // A few large soft wireframe icosahedrons drifting in the background for
+  // depth. They always share the same color and opacity (set together in
+  // applyThemeStyle/animate below), so one material serves all three meshes
+  // instead of three separate instances doing identical per-frame updates.
+  const shapeMaterial = new MeshBasicMaterial({
+    color: '#000000',
+    wireframe: true,
+    transparent: true,
+  });
   const shapes = [];
   for (let i = 0; i < 3; i++) {
-    const geo = new THREE.IcosahedronGeometry(1.4 + i * 0.6, 1);
-    const mat = new THREE.MeshBasicMaterial({
-      color: '#000000',
-      wireframe: true,
-      transparent: true,
-    });
-    const mesh = new THREE.Mesh(geo, mat);
+    const geo = new IcosahedronGeometry(1.4 + i * 0.6, 1);
+    const mesh = new Mesh(geo, shapeMaterial);
     mesh.position.set(
       (Math.random() - 0.5) * 10,
       (Math.random() - 0.5) * 6,
@@ -105,9 +128,7 @@ export function initScene(canvas, initialTheme = 'light') {
     material.blending = palette.blending;
     material.opacity = palette.particleOpacity;
     material.needsUpdate = true;
-    shapes.forEach((mesh) => {
-      mesh.material.opacity = palette.shapeOpacity;
-    });
+    shapeMaterial.opacity = palette.shapeOpacity;
   }
   applyThemeStyle();
 
@@ -145,7 +166,7 @@ export function initScene(canvas, initialTheme = 'light') {
     scrollProgress = p;
   }
 
-  const tmpColor = new THREE.Color();
+  const tmpColor = new Color();
   function currentThemeColor(p) {
     const scaled = p * (themeColors.length - 1);
     const idx = Math.min(Math.floor(scaled), themeColors.length - 2);
@@ -169,6 +190,15 @@ export function initScene(canvas, initialTheme = 'light') {
     needsRender = true;
   }
   window.addEventListener('resize', onResize);
+
+  // A lost WebGL context (GPU driver reset, mobile memory pressure) would
+  // otherwise leave the background permanently blank — allow the browser to
+  // restore it, and force a fresh render once it does since our on-demand
+  // loop has no other reason to know the old frame is gone.
+  canvas.addEventListener('webglcontextlost', (e) => e.preventDefault());
+  canvas.addEventListener('webglcontextrestored', () => {
+    needsRender = true;
+  });
 
   const EPSILON = 0.0008;
   function animate() {
@@ -196,7 +226,7 @@ export function initScene(canvas, initialTheme = 'light') {
     // than a lagging fade.
     const color = currentThemeColor(scrollProgress);
     material.color.copy(color);
-    shapes.forEach((mesh) => mesh.material.color.copy(color));
+    shapeMaterial.color.copy(color);
 
     renderer.render(scene, camera);
 
