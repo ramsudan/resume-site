@@ -90,7 +90,7 @@ export function initScene(canvas, initialTheme = 'light') {
   geometry.setAttribute('position', new BufferAttribute(positions, 3));
 
   const material = new PointsMaterial({
-    size: 0.075,
+    size: 0.045,
     color: '#000000',
     transparent: true,
     depthWrite: false,
