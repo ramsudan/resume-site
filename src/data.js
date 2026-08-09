@@ -45,7 +45,7 @@ export const resume = {
       ],
     },
     {
-      company: 'Cengage',
+      company: 'Cengage Learning',
       title: 'Web Developer',
       start: 'Apr 2013',
       end: 'Jul 2014',
