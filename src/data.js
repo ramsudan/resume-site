@@ -23,11 +23,12 @@ export const resume = {
       bullets: [
         'Built various harnesses in Kiro (skills, agents and more) for AI-driven workflows for tech-debt and upgrade automations etc. Supported the analysis and review of AIDLC process pilot',
         'Built review tool for reviewing various artifacts (skills, agents and more) developed for kiro combining both non deterministic as well as deterministic checks for adherence to best practices in addition to the eval testing harness',
+        'Created proof-of-concept bot with AI backend to help developers query our architecture docs, best practices as well as automate our intake process',
         'Worked on effort on app development with current micro frontend monorepo with multiple shells and MFEs to unify the code to achieve the holy grail of developing features once that works across all web, iOS and Android devices.',
         'Built a config-driven development approach for Angular, enabling remarkably versatile pages generated from configuration.',
         'Led Angular upgrades from 13 to 20 (NgRx, RxJS, module federation, Node etc) and CapacitorJS upgrades from 5 to 7.',
         'Standardized and automated various aspects of code standards and code hygiene across entire micro frontend monorepo, both general and company specific with Prettier/ESLint and custom lint rules.',
-        'Improved build performance and bundle sizes for our monorepo build needing ~16GB of memory by mapping circular dependencies and tuning webpack/TS/angular configurations, optimized chunking and shared assets, plugging minification gaps in jsons and GraphQL etc to reduce bundle sizes as well as improve app quality scores and ran esbuild and Nx migration proofs-of-concept for leadership estimates.',
+        'Improved build performance and bundle sizes for our monorepo build needing ~16GB of memory by mapping circular dependencies and tuning webpack/TS/angular configurations, optimized chunking and shared assets, plugging minification gaps in jsons and GraphQL etc to reduce bundle sizes as well as improve app quality scores and ran esbuild and Nx migration proof-of-concept for leadership estimates.',
         'Built and stabilized mobile flows (biometrics, push, deep/universal links etc), integrated native SDK plugins on Android and iOS, and fixed various production-blocking defects.',
         'Remediated a large backlog of Veracode and Gitguardian vulnerability findings across various libraries, MFEs, and the mobile app, and built an automated secrets-incident reporting harness.',
         'Created architecture L diagrams and design docs enabling independent feature team delivery.',
