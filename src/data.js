@@ -23,7 +23,7 @@ export const resume = {
       bullets: [
         'Built various harnesses in Kiro (skills, agents and more) for AI-driven workflows for tech-debt and upgrade automations etc. Supported the analysis and review of AIDLC process pilot',
         'Built review tool for reviewing various artifacts (skills, agents and more) developed for kiro combining both non deterministic as well as deterministic checks for adherence to best practices in addition to the eval testing harness',
-        'Created proof-of-concept bot with AI backend to help developers query our architecture docs, best practices as well as automate our JIRA intake and ticket creation process',
+        'Created proof-of-concept bot with AI backend to help developers query our architecture docs, best practices as well as automate our JIRA intake and ticket creation process freeing up our time to focus on other things',
         'Worked on effort on app development with current micro frontend monorepo with multiple shells and MFEs to unify the code to achieve the holy grail of developing features once that works across all web, iOS and Android devices.',
         'Built a config-driven development approach for Angular, enabling remarkably versatile pages generated from configuration.',
         'Led Angular upgrades from 13 to 20 (NgRx, RxJS, module federation, Node etc) and CapacitorJS upgrades from 5 to 7.',
