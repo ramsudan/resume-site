@@ -129,7 +129,10 @@ main {
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  padding: 0 1.5rem;
+  /* Top/bottom padding keeps the content clear of the fixed nav (~70px)
+     even when the viewport is shorter than the hero copy, e.g. a phone in
+     landscape, where centering alone would push the name under the nav. */
+  padding: 5.5rem 1.5rem;
   max-width: var(--max-width);
   margin: 0 auto;
 }
