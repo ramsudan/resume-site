@@ -46,7 +46,7 @@ export const resume = {
     },
     {
       company: 'U.S. Bank',
-      title: 'Web User Interface Developer',
+      title: 'Web Developer',
       start: 'Jul 2014',
       end: 'Jan 2015',
       bullets: [
@@ -64,7 +64,7 @@ export const resume = {
     },
     {
       company: 'Verizon',
-      title: 'Web User Interface Developer',
+      title: 'Web Developer',
       start: 'Sep 2012',
       end: 'Mar 2013',
       bullets: [
@@ -82,14 +82,14 @@ export const resume = {
     'TypeScript',
     '.NET Core',
     'Observables / RxJS',
-    'Webpack / Module Federation',
+    'Module Federation / Micro Frontends',
+    'Monorepo Architecture',
     'Application Security',
     'Node/Express',
     'Gitlab CI/CD',
-    'Micro Frontends',
-    'Monorepo Architecture',
     'Responsive / Mobile UI',
     'Test Driven Development',
+    'Lucid'
   ],
 
   certifications: ['Multi AI Agent Systems with crewAI'],
