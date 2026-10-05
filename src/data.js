@@ -21,15 +21,17 @@ export const resume = {
       start: 'Dec 2021',
       end: 'Present',
       bullets: [
-        'Built AI developer tooling in Kiro (skills, hooks, and code- and security-review agents) and piloted AI-driven workflows for tech-debt and upgrade automation.',
-        'Architecture-team engineer on Spectrum’s Angular/NgRx micro-frontend monorepo (Spectrum.net and the My Spectrum app via CapacitorJS), where features ship once across web, iOS, and Android. ~1,200 commits since late 2021.',
+        'Built various harnesses in Kiro (skills, agents and more) and piloted AI-driven workflows for tech-debt and upgrade automation. Supported the analysis and review of AIDLC process pilot',
+        'Built review tool for reviewing various artifacts (skills, agents and more) developed for kiro combining both non deterministic as well as deterministic checks for adherence to best practices in addition to the eval testing harness',
+        'Worked on effort on app development with current micro frontend monorepo with multiple shells and MFEs to unify the code to achieve the holy grail of developing features once that works across all web, iOS and Android devices.',
         'Built a config-driven development approach for Angular, enabling remarkably versatile pages generated from configuration.',
-        'Led Angular upgrades from 13 to 20 (NgRx, RxJS, Material, module federation, Node 20) and CapacitorJS upgrades from 5 to 7, moving toward standalone components.',
-        'Migrated all micro-frontends from FlexLayout to the Kite Design System, and standardized the monorepo with Prettier/ESLint, bundle budgets, and custom lint rules.',
-        'Fixed a monorepo build needing ~16GB of memory by mapping circular dependencies and tuning webpack/TS; optimized chunking and shared assets, and ran esbuild and Nx proofs-of-concept for leadership estimates.',
-        'Built and stabilized mobile flows (biometrics, push, deep/universal links, live updates), integrated native SDK plugins on Android and iOS, and fixed production-blocking defects like white-screen-on-resume and token refresh.',
-        'Remediated a large backlog of Veracode and NowSecure findings across libraries, MFEs, and the mobile app, pinned dependencies against npm supply-chain attacks, and built an automated secrets-incident reporting harness.',
-        'Wrote architecture diagrams and design docs enabling independent team delivery; drove an SSO performance initiative; reverted a change behind ~600 nightly E2E failures and stabilized the regression infrastructure.',
+        'Led Angular upgrades from 13 to 20 (NgRx, RxJS, module federation, Node etc) and CapacitorJS upgrades from 5 to 7.',
+        'Standardized and automated various aspects of code standards and hygiene, both general and company specific with Prettier/ESLint and custom lint rules.',
+        'Fixed a monorepo build needing ~16GB of memory by mapping circular dependencies and tuning webpack/TS; optimized chunking and shared assets, and ran esbuild and Nx migration proofs-of-concept for leadership estimates.',
+        'Built and stabilized mobile flows (biometrics, push, deep/universal links etc), integrated native SDK plugins on Android and iOS, and fixed various production-blocking defects.',
+        'Remediated a large backlog of Veracode and Gitguardian vulnerability findings across libraries, MFEs, and the mobile app, and built an automated secrets-incident reporting harness.',
+        'Wrote architecture L diagrams and design docs enabling independent team delivery; drove an SSO performance initiative.',
+        'Automated e2e results comparisons to speed up the e2e failures discovery process significantly reducing time to production'
       ],
     },
     {
@@ -38,7 +40,7 @@ export const resume = {
       start: 'Feb 2015',
       end: 'Mar 2021',
       bullets: [
-        'Developed UI features for a provider data entry and management system, an anti-fraud workbench, a provider data aggregator, and corporate dashboards.',
+        'Developed features for a provider data entry and management system, an anti-fraud workbench, a provider data aggregator, and corporate dashboards.',
         'Migrated projects from legacy .NET 4.5 to a modern .NET Core and Angular stack.',
       ],
     },
@@ -57,7 +59,7 @@ export const resume = {
       start: 'Apr 2013',
       end: 'Jul 2014',
       bullets: [
-        'Built UI features for Mindtap and MTX, the company’s educational platform for delivering course materials, with a focus on modular design and Test Driven Development.',
+        'Built features for Mindtap and MTX, the company’s educational platform for delivering course materials, with a focus on modular design and Test Driven Development.',
       ],
     },
     {
@@ -66,7 +68,7 @@ export const resume = {
       start: 'Sep 2012',
       end: 'Mar 2013',
       bullets: [
-        'Developed UI features for FiOS TV, focused on code reusability and performance optimization.',
+        'Developed features for FiOS TV, focused on code reusability and performance optimization.',
       ],
     },
   ],
