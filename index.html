@@ -8,6 +8,19 @@
       name="description"
       content="Ramsudan Dongol — Web / Hybrid App Developer. Resume and portfolio."
     />
+    <script>
+      // Set the theme before first paint so the page never flashes light.
+      // Dark is the default; only a saved 'light' choice overrides it.
+      (function () {
+        var theme = 'dark';
+        try {
+          if (localStorage.getItem('resume-theme-choice') === 'light') {
+            theme = 'light';
+          }
+        } catch (e) {}
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

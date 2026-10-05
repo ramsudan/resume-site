@@ -113,13 +113,20 @@ function renderContact() {
   .filter(Boolean)
   .forEach((s) => app.appendChild(s));
 
-// Theme (light default, persisted, respects toggle)
-const THEME_KEY = 'resume-theme';
-const storedTheme = localStorage.getItem(THEME_KEY);
-let theme = storedTheme === 'dark' ? 'dark' : 'light';
+// Theme: dark by default. Only an explicit toggle click is saved, so the
+// default isn't frozen into storage on first visit. The key is versioned
+// (and mirrored in the inline script in index.html) so the 'light' value the
+// old code auto-saved for every visitor doesn't override the new default.
+const THEME_KEY = 'resume-theme-choice';
+let theme = 'dark';
+try {
+  if (localStorage.getItem(THEME_KEY) === 'light') theme = 'light';
+} catch {
+  // storage unavailable (private mode etc.) -- stay on the default
+}
 
 const toggleBtn = document.getElementById('theme-toggle');
-function applyTheme(next) {
+function applyTheme(next, { persist = false } = {}) {
   theme = next;
   document.documentElement.setAttribute('data-theme', theme);
   toggleBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
@@ -127,7 +134,13 @@ function applyTheme(next) {
     'aria-label',
     theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
   );
-  localStorage.setItem(THEME_KEY, theme);
+  if (persist) {
+    try {
+      localStorage.setItem(THEME_KEY, theme);
+    } catch {
+      // ignore
+    }
+  }
 }
 applyTheme(theme);
 
@@ -136,7 +149,7 @@ const canvas = document.getElementById('bg');
 const { setScrollProgress, setTheme } = initScene(canvas, theme);
 
 toggleBtn.addEventListener('click', () => {
-  applyTheme(theme === 'dark' ? 'light' : 'dark');
+  applyTheme(theme === 'dark' ? 'light' : 'dark', { persist: true });
   setTheme(theme);
 });
 
