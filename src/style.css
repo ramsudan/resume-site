@@ -341,6 +341,16 @@ main {
   .nav a {
     font-size: 0.78rem;
   }
+  /* Pin the theme toggle to the top-right corner so it stays on the right
+     no matter how the links wrap at different widths. */
+  .theme-toggle {
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
+    width: 1.8rem;
+    height: 1.8rem;
+    font-size: 0.85rem;
+  }
   .section {
     padding: 4rem 1.25rem;
   }
